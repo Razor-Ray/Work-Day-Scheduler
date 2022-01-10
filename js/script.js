@@ -1,18 +1,39 @@
 var currentTime = moment()
-var currentHour = moment()
+var currentHour = moment().hour()
 var hoursBlocks = []
-
-var tableBodyEl = $('#tableBody')
+var hoursBlock24hour = []
+var bodyEl = $('.container')
 
 for(i=9;i<18;i++){
-    hoursBlocks.push(moment(i+":00","h:mm").format("hhA"))
+    hoursBlocks.push(moment(i+":00","h:mm").format("hhA"));
+    hoursBlock24hour.push(moment(i+":00","h:mm").format("H"))
 }
 
-
-
-console.log(hoursBlocks)
-
 for(var i =0; i<hoursBlocks.length; i++){
-    tableBodyEl.append(
-        '<tr class="row"><td data-label="hour"class="hour">'+hoursBlocks[i]+'</td><td data-label="text"><textarea name="text-area"class="past"id="textArea"></textarea></td><td data-label="SaveButton"><button class="saveBtn">Save</button></td></tr>'
-    )}
+    bodyEl.append('<div id ="'+ hoursBlock24hour[i] +'"class="row time-block"><div class="col-md-1 hour">'+hoursBlocks[i] +'</div><textarea class="col-md-10 description"></textarea><button class="btn saveBtn col-md-1"><i class="fas fa-save"></i></button></div>')
+}
+
+function setTimeBlockClass() {
+    var timeNow = moment().hour();
+     $(".time-block").each(function () {
+        var blockTime = parseInt($(this).attr("id"));
+        console.log(blockTime)
+        if (blockTime < timeNow) {
+            $(this).removeClass("future");
+            $(this).removeClass("present");
+            $(this).addClass("past");
+        }
+        else if (blockTime === timeNow) {
+            $(this).removeClass("past");
+            $(this).removeClass("future");
+            $(this).addClass("present");
+        }
+        else {
+            $(this).removeClass("present");
+            $(this).removeClass("past");
+            $(this).addClass("future");
+
+        }
+    })
+}
+setTimeBlockClass();
