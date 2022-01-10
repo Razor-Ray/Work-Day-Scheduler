@@ -8,41 +8,32 @@ for(i=9;i<18;i++){
 }
 
 for(var i =0; i<hoursBlocks.length; i++){
-    bodyEl.append('<div id ="'+ hoursBlock24hour[i] +'"class="row time-block"><div class="col-md-1 hour">'+hoursBlocks[i]+'</div><textarea class="col-md-10 description"></textarea><button class="btn saveBtn col-md-1"><i class="fas fa-save"></i></button></div>');
-    
+    bodyEl.append('<section id =" '+ hoursBlock24hour[i] +' "class="row time-block"><div class="hour">'+hoursBlocks[i]+'</div><textarea class="description"></textarea><button class="saveBtn"><img src="./assets/SaveIcon.png" alt="Save"></button></section>');
 }
 
-for(i=9;i<18;i++){
-    var index = "#"+i +" .description"
-    $(index).val(localStorage.getItem(i));
-} 
-
-function setTimeBlockClass() {
+$(".description").each(function () {
     var currentTime = moment().hour();
-     $(".time-block").each(function () {
-        var blockTime = parseInt($(this).attr("id"));
-        if (blockTime < currentTime) {
-            $(this).removeClass("future");
-            $(this).removeClass("present");
-            $(this).addClass("past");
-        }
-        else if (blockTime === currentTime) {
-            $(this).removeClass("past");
-            $(this).removeClass("future");
-            $(this).addClass("present");
-        }
-        else {
-            $(this).removeClass("present");
-            $(this).removeClass("past");
-            $(this).addClass("future");
-
-        }
-    })
-}
-setTimeBlockClass();
+    var blockTime = parseInt($(this).parent().attr("id"));
+    if (blockTime < currentTime) {
+        $(this).addClass("past");
+    }
+    else if (blockTime === currentTime) {
+        $(this).addClass("present");
+    }
+    else {
+        $(this).addClass("future");
+    }
+})
 
 $(".saveBtn").on("click", function () {
-    var value = $(this).siblings(".description").val();
-    var key = $(this).parent().attr("id");
-    localStorage.setItem(key, value);
+    var text = $(this).siblings(".description").val();
+    var hourBlock = $(this).siblings(".hour").text();
+    localStorage.setItem(hourBlock, text);
 })
+
+$(".hour").each(function() {
+    var hourBlock = $(this).text();
+    var localKey = localStorage.getItem(hourBlock);
+    $(this).siblings(".description").val(localKey);
+});
+    
