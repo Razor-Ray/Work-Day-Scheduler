@@ -1,5 +1,3 @@
-var currentTime = moment()
-var currentHour = moment().hour()
 var hoursBlocks = []
 var hoursBlock24hour = []
 var bodyEl = $('.container')
@@ -14,23 +12,21 @@ for(var i =0; i<hoursBlocks.length; i++){
     
 }
 
-//get item from local storage
 for(i=9;i<18;i++){
     var index = "#"+i +" .description"
     $(index).val(localStorage.getItem(i));
 } 
 
-//add class to textarea
 function setTimeBlockClass() {
-    var timeNow = moment().hour();
+    var currentTime = moment().hour();
      $(".time-block").each(function () {
         var blockTime = parseInt($(this).attr("id"));
-        if (blockTime < timeNow) {
+        if (blockTime < currentTime) {
             $(this).removeClass("future");
             $(this).removeClass("present");
             $(this).addClass("past");
         }
-        else if (blockTime === timeNow) {
+        else if (blockTime === currentTime) {
             $(this).removeClass("past");
             $(this).removeClass("future");
             $(this).addClass("present");
@@ -45,7 +41,6 @@ function setTimeBlockClass() {
 }
 setTimeBlockClass();
 
-//set element to local storage
 $(".saveBtn").on("click", function () {
     var value = $(this).siblings(".description").val();
     var key = $(this).parent().attr("id");
